@@ -1,17 +1,18 @@
-research_task:
+set_game_task:
   description: >
-    Conduct a thorough research about {topic}
-    Make sure you find any interesting and relevant information given
-    the current year is 2024.
+    Set the initial state of the game. This includes making the cards repartition
+    between the players where each player gets 2 cards. After that, the game master
+    will ask the player_1 to bet. The way the state changed is by means of updating
+    a json file that contains the state of the game.
   expected_output: >
-    A list with 10 bullet points of the most relevant information about {topic}
-  agent: researcher
+    The instruction to the player_1 to bet.
+  agent: game_master
+# TODO: Add the tools that will be used for setting the initial the game state.
 
-reporting_task:
+player_1_bet_task:
   description: >
-    Review the context you got and expand each topic into a full section for a report.
-    Make sure the report is detailed and contains any and all relevant information.
+    The player_1 sees his cards on hand, analyzes the community cards
+    in relationship the cards on hand and makes a bet accordingly.
   expected_output: >
-    A fully fledge reports with the mains topics, each with a full section of information.
-    Formatted as markdown without '```'
-  agent: reporting_analyst
+    Show your bet (not your cards) and tell player_2 to place a bet.
+  agent: player_1

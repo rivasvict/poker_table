@@ -1,6 +1,7 @@
 from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
 
+from poker_table.tools.set_game_tool import SetBetForPlayer1Tool, SetGameTool, GetPlayer1CardsTool, GetPlayer1CardsInput
 # Uncomment the following line to use an example of a custom tool
 # from poker_table.tools.custom_tool import MyCustomTool
 
@@ -15,32 +16,41 @@ class PokerTable():
 	tasks_config = 'config/tasks.yaml'
 
 	@agent
-	def researcher(self) -> Agent:
+	def game_master(self) -> Agent:
 		return Agent(
-			config=self.agents_config['researcher'],
-			# tools=[MyCustomTool()], # Example of custom tool, loaded on the beginning of file
+			config=self.agents_config['game_master'],
 			verbose=True
 		)
 
 	@agent
-	def reporting_analyst(self) -> Agent:
+	def player_1(self) -> Agent:
 		return Agent(
-			config=self.agents_config['reporting_analyst'],
+			config=self.agents_config['player_1'],
 			verbose=True
 		)
 
 	@task
-	def research_task(self) -> Task:
+	def set_game_task(self) -> Task:
 		return Task(
-			config=self.tasks_config['research_task'],
+			config=self.tasks_config['set_game_task'],
+			tools=[SetGameTool()]
 		)
 
 	@task
-	def reporting_task(self) -> Task:
+	def player_1_bet_task(self) -> Task:
 		return Task(
-			config=self.tasks_config['reporting_task'],
-			output_file='report.md'
+			config=self.tasks_config['player_1_bet_task'],
+			# TODO: Add a tool for player to be able to see the community cards
+			tools=[GetPlayer1CardsTool(), SetBetForPlayer1Tool()]
 		)
+
+	# @task
+	# def reporting_task(self) -> Task:
+	# 	return Task(
+	# 		config=self.tasks_config['reporting_task'],
+	# 		output_file='report.md'
+	# 	)
+
 
 	@crew
 	def crew(self) -> Crew:
