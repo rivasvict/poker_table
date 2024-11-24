@@ -1,7 +1,7 @@
 from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
 
-from poker_table.tools.set_game_tool import SetBetForPlayer1Tool, SetGameTool, GetPlayer1CardsTool, GetPlayer1CardsInput
+from poker_table.tools.set_game_tool import SetBetForPlayer1Tool, SetGameTool, GetPlayer1CardsTool, SetBetForPlayer2Tool, GetPlayer2CardsTool, SetBetForPlayer3Tool, GetPlayer3CardsTool, GetCommunityCardsTool, GetPlayersAndCommunityCardsTool
 # Uncomment the following line to use an example of a custom tool
 # from poker_table.tools.custom_tool import MyCustomTool
 
@@ -29,6 +29,20 @@ class PokerTable():
 			verbose=True
 		)
 
+	@agent
+	def player_2(self) -> Agent:
+		return Agent(
+			config=self.agents_config['player_2'],
+			verbose=True
+		)
+
+	@agent
+	def player_3(self) -> Agent:
+		return Agent(
+			config=self.agents_config['player_3'],
+			verbose=True
+		)
+
 	@task
 	def set_game_task(self) -> Task:
 		return Task(
@@ -40,10 +54,32 @@ class PokerTable():
 	def player_1_bet_task(self) -> Task:
 		return Task(
 			config=self.tasks_config['player_1_bet_task'],
-			# TODO: Add a tool for player to be able to see the community cards
-			tools=[GetPlayer1CardsTool(), SetBetForPlayer1Tool()]
+			# TODO: Add a tool for player to be able to see the players' facial expressions
+			tools=[GetCommunityCardsTool(), GetPlayer1CardsTool(), SetBetForPlayer1Tool()]
+		)
+	
+	@task
+	def player_2_bet_task(self) -> Task:
+		return Task(
+			config=self.tasks_config['player_2_bet_task'],
+			# TODO: Add a tool for player to be able to see the players' facial expressions
+			tools=[GetCommunityCardsTool(), GetPlayer2CardsTool(), SetBetForPlayer2Tool()]
 		)
 
+	@task
+	def player_3_bet_task(self) -> Task:
+		return Task(
+			config=self.tasks_config['player_3_bet_task'],
+			# TODO: Add a tool for player to be able to see the players' facial expressions
+			tools=[GetCommunityCardsTool(), GetPlayer3CardsTool(), SetBetForPlayer3Tool()]
+		)
+
+	@task
+	def decide_round_winner_task(self) -> Task:
+		return Task(
+			config=self.tasks_config['decide_round_winner_task'],
+			tools=[GetPlayersAndCommunityCardsTool()]
+		)
 	# @task
 	# def reporting_task(self) -> Task:
 	# 	return Task(

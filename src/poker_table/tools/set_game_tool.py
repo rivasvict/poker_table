@@ -53,3 +53,91 @@ class SetBetForPlayer1Tool(BaseTool):
 
     def _run(self, amount: int, facial_expression: str) -> str:
         return PokerGameFunctions.set_bet(player_id="player_1", amount=amount, facial_expression=facial_expression)
+
+class GetPlayer2CardsInput(BaseModel):
+    """Input schema for GetPlayerCards."""
+    # player_id: str = Field(..., description="The id of the player.")
+
+class GetPlayer2CardsTool(BaseTool):
+    name: str = "getPlayer2Cards"
+    description: str = (
+        "Get the cards of the player 2."
+    )
+    args_schema: Type[BaseModel] = GetPlayer2CardsInput
+
+    def _run(self) -> str:
+        cards = PokerGameFunctions.get_cards_by_player(player_id='player_2')
+        return cards;
+
+class SetBetForPlayer2Input(BaseModel):
+    """Input schema for SetBetForPlayer2."""
+    amount: int = Field(..., description="The amount of the bet.")
+    facial_expression: str = Field(..., description="The facial expression of the player.")
+
+class SetBetForPlayer2Tool(BaseTool):
+    name: str = "setBetForPlayer2"
+    description: str = (
+        "Set the bet of the player_2."
+    )
+    args_schema: Type[BaseModel] = SetBetForPlayer2Input
+
+    def _run(self, amount: int, facial_expression: str) -> str:
+        return PokerGameFunctions.set_bet(player_id="player_2", amount=amount, facial_expression=facial_expression)
+
+class GetPlayer3CardsInput(BaseModel):
+    """Input schema for GetPlayerCards."""
+    # player_id: str = Field(..., description="The id of the player.")
+
+class GetPlayer3CardsTool(BaseTool):
+    name: str = "getPlayer3Cards"
+    description: str = (
+        "Get the cards of the player 3."
+    )
+    args_schema: Type[BaseModel] = GetPlayer3CardsInput
+
+    def _run(self) -> str:
+        cards = PokerGameFunctions.get_cards_by_player(player_id='player_3')
+        return cards;
+
+class SetBetForPlayer3Input(BaseModel):
+    """Input schema for SetBetForPlayer3."""
+    amount: int = Field(..., description="The amount of the bet.")
+    facial_expression: str = Field(..., description="The facial expression of the player.")
+
+class SetBetForPlayer3Tool(BaseTool):
+    name: str = "setBetForPlayer3"
+    description: str = (
+        "Set the bet of the player_3."
+    )
+    args_schema: Type[BaseModel] = SetBetForPlayer3Input
+
+    def _run(self, amount: int, facial_expression: str) -> str:
+        return PokerGameFunctions.set_bet(player_id="player_3", amount=amount, facial_expression=facial_expression)
+
+class GetCommunityCardsInput(BaseModel):
+    """Input schema for GetCommunityCards."""
+    # player_id: str = Field(..., description="The id of the player.")
+
+class GetCommunityCardsTool(BaseTool):
+    name: str = "getCommunityCards"
+    description: str = (
+        "Get the community cards."
+    )
+    args_schema: Type[BaseModel] = GetCommunityCardsInput
+
+    def _run(self) -> str:
+        return PokerGameFunctions.get_community_cards()
+
+class GetPlayersAndCommunityCardsInput(BaseModel):
+    """Input schema for GetPlayersAndCommunityCards."""
+    # player_id: str = Field(..., description="The id of the player.")
+
+class GetPlayersAndCommunityCardsTool(BaseTool):
+    name: str = "getPlayersAndCommunityCards"
+    description: str = (
+        "Get the players and the community cards."
+    )
+    args_schema: Type[BaseModel] = GetPlayersAndCommunityCardsInput
+
+    def _run(self) -> str:
+        return PokerGameFunctions.get_players_and_community_cards()

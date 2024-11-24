@@ -11,8 +11,32 @@ set_game_task:
 
 player_1_bet_task:
   description: >
-    The player_1 sees his cards on hand, analyzes the community cards
-    in relationship the cards on hand and makes a bet accordingly.
+    You see your cards on hand, analyze the community cards
+    in relationship the cards on hand and make a bet accordingly.
   expected_output: >
-    Show your bet (not your cards) and tell player_2 to place a bet.
+    The bet you made. Then instruct the player_2 to bet.
   agent: player_1
+
+player_2_bet_task:
+  description: >
+    You see your cards on hand, analyze the community cards
+    in relationship the cards on hand and make a bet accordingly.
+  expected_output: >
+    The bet you made. Then instruct the player_3 to bet.
+  agent: player_2
+
+player_3_bet_task:
+  description: >
+    You see your cards on hand, analyze the community cards
+    in relationship the cards on hand and make a bet accordingly.
+  expected_output: >
+    The bet you made. Ask the game master to decide who won
+    the round.
+  agent: player_3
+
+decide_round_winner_task:
+  description: >
+    Based on the players' bets and the community cards, the game master decides who won the round.
+  expected_output: >
+    The result of the round.
+  agent: game_master

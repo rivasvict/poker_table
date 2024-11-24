@@ -120,6 +120,11 @@ class PokerGameFunctions:
         return []
 
     @staticmethod
+    def get_community_cards() -> str:
+        game_state = PokerGameFunctions.get_game_state()
+        return str(game_state.communityCards)
+
+    @staticmethod
     def set_bet(player_id: str, amount: int, facial_expression: str) -> str:
         game_state = PokerGameFunctions.get_game_state()
         for player in game_state.players:
@@ -141,7 +146,7 @@ class PokerGameFunctions:
                 else:
                     player.cards = []
                     player.action = "FOLD"
-                    return f"Bet not set successfully for player {player_id}: '{amount}' chips with facial expression '{facial_expression}'."
+                    return f"Bet not set successfully for player {player_id}. folded."
             
         # Update the game state file
         PokerGameFunctions.update_game_state(game_state)
@@ -153,6 +158,10 @@ class PokerGameFunctions:
             json.dump(game_state.model_dump(), f)
         return game_state
 
+    @staticmethod
+    def get_players_and_community_cards() -> str:
+        game_state = PokerGameFunctions.get_game_state()
+        return f"Players: {game_state.players}\nCommunity Cards: {game_state.communityCards}"
 # game_state = GameState(gameId='123456', timestamp='2024-03-20T15:30:00Z', potAmount=1500, communityCards=[], currentBet=200, roundHistory=[], gameStatus='IN_PROGRESS')
 # print(PokerGameFunctions.get_cards_by_player('player_1'))
 # print(game_state.model_dump_json(indent=2))
