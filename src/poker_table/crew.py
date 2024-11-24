@@ -51,19 +51,40 @@ class PokerTable():
 		)
 
 	@task
+	def player_1_check_cards_task(self) -> Task:
+		return Task(
+			config=self.tasks_config['player_1_check_cards_task'],
+			tools=[GetPlayer1CardsTool(), GetCommunityCardsTool()]
+		)
+
+	@task
 	def player_1_bet_task(self) -> Task:
 		return Task(
 			config=self.tasks_config['player_1_bet_task'],
 			# TODO: Add a tool for player to be able to see the players' facial expressions
-			tools=[GetCommunityCardsTool(), GetPlayer1CardsTool(), SetBetForPlayer1Tool()]
+			tools=[SetBetForPlayer1Tool()]
 		)
 	
+	@task
+	def player_2_check_cards_task(self) -> Task:
+		return Task(
+			config=self.tasks_config['player_2_check_cards_task'],
+			tools=[GetPlayer2CardsTool(), GetCommunityCardsTool()]
+		)
+
 	@task
 	def player_2_bet_task(self) -> Task:
 		return Task(
 			config=self.tasks_config['player_2_bet_task'],
 			# TODO: Add a tool for player to be able to see the players' facial expressions
-			tools=[GetCommunityCardsTool(), GetPlayer2CardsTool(), SetBetForPlayer2Tool()]
+			tools=[SetBetForPlayer2Tool()]
+		)
+
+	@task
+	def player_3_check_cards_task(self) -> Task:
+		return Task(
+			config=self.tasks_config['player_3_check_cards_task'],
+			tools=[GetPlayer3CardsTool(), GetCommunityCardsTool()]
 		)
 
 	@task
@@ -71,7 +92,7 @@ class PokerTable():
 		return Task(
 			config=self.tasks_config['player_3_bet_task'],
 			# TODO: Add a tool for player to be able to see the players' facial expressions
-			tools=[GetCommunityCardsTool(), GetPlayer3CardsTool(), SetBetForPlayer3Tool()]
+			tools=[SetBetForPlayer3Tool()]
 		)
 
 	@task

@@ -7,28 +7,48 @@ set_game_task:
   expected_output: >
     The instruction to the player_1 to bet.
   agent: game_master
-# TODO: Add the tools that will be used for setting the initial the game state.
+
+player_1_check_cards_task:
+  description: >
+    You see your cards on hand and the community cards.
+  expected_output: >
+    String that describes your cards and the community cards.
+  agent: player_1
 
 player_1_bet_task:
   description: >
-    You see your cards on hand, analyze the community cards
-    in relationship the cards on hand and make a bet accordingly.
+    After checking your cards and the community cards, carefully
+    think about your bet and make it.
   expected_output: >
     The bet you made. Then instruct the player_2 to bet.
   agent: player_1
 
+player_2_check_cards_task:
+  description: >
+    You see your cards on hand and the community cards.
+  expected_output: >
+    String that describes your cards and the community cards.
+  agent: player_2
+
 player_2_bet_task:
   description: >
-    You see your cards on hand, analyze the community cards
-    in relationship the cards on hand and make a bet accordingly.
+    After checking your cards and the community cards, carefully
+    think about your bet and make it.
   expected_output: >
     The bet you made. Then instruct the player_3 to bet.
   agent: player_2
 
+player_3_check_cards_task:
+  description: >
+    You see your cards on hand and the community cards.
+  expected_output: >
+    String that describes your cards and the community cards.
+  agent: player_3
+
 player_3_bet_task:
   description: >
-    You see your cards on hand, analyze the community cards
-    in relationship the cards on hand and make a bet accordingly.
+    After checking your cards and the community cards, carefully
+    think about your bet and make it.
   expected_output: >
     The bet you made. Ask the game master to decide who won
     the round.
