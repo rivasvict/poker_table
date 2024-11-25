@@ -1,7 +1,7 @@
 from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
 
-from poker_table.tools.set_game_tool import SetBetForPlayer1Tool, SetGameTool, GetPlayer1CardsTool, SetBetForPlayer2Tool, GetPlayer2CardsTool, SetBetForPlayer3Tool, GetPlayer3CardsTool, GetCommunityCardsTool, GetPlayersAndCommunityCardsTool
+from poker_table.tools.set_game_tool import GetCurrentRoundTool, SetBetForPlayer1Tool, SetGameTool, GetPlayer1CardsTool, SetBetForPlayer2Tool, GetPlayer2CardsTool, SetBetForPlayer3Tool, GetPlayer3CardsTool, GetCommunityCardsTool, GetPlayersAndCommunityCardsTool, SetRiverRoundTool, SetTurnRoundTool
 # Uncomment the following line to use an example of a custom tool
 # from poker_table.tools.custom_tool import MyCustomTool
 
@@ -92,22 +92,36 @@ class PokerTable():
 		return Task(
 			config=self.tasks_config['player_3_bet_task'],
 			# TODO: Add a tool for player to be able to see the players' facial expressions
-			tools=[SetBetForPlayer3Tool()]
+			tools=[SetBetForPlayer3Tool(), GetCurrentRoundTool()]
 		)
 
 	@task
-	def decide_round_winner_task(self) -> Task:
+	def set_turn_round_task(self) -> Task:
 		return Task(
-			config=self.tasks_config['decide_round_winner_task'],
+			config=self.tasks_config['set_turn_round_task'],
+			tools=[SetTurnRoundTool()]
+		)
+
+	@task
+	def set_river_round_task(self) -> Task:
+		return Task(
+			config=self.tasks_config['set_river_round_task'],
+			tools=[SetRiverRoundTool()]
+		)
+
+	@task
+	def decide_game_winner_task(self) -> Task:
+		return Task(
+			config=self.tasks_config['decide_game_winner_task'],
 			tools=[GetPlayersAndCommunityCardsTool()]
 		)
+
 	# @task
 	# def reporting_task(self) -> Task:
 	# 	return Task(
 	# 		config=self.tasks_config['reporting_task'],
 	# 		output_file='report.md'
 	# 	)
-
 
 	@crew
 	def crew(self) -> Crew:

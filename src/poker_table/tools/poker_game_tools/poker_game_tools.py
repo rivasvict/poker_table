@@ -1,5 +1,5 @@
 import json
-from typing import Dict, List, Any, Literal, Optional
+from typing import Dict, List, Any, Literal, Optional, Tuple
 import random
 from pydantic import BaseModel
 
@@ -22,7 +22,7 @@ class Player(BaseModel):
     action: Optional[Literal["RAISE", "CALL", "FOLD"]]
 
 class RoundHistory(BaseModel):
-    round: Literal["PRE_FLOP", "FLOP", "TURN", "RIVER"]
+    round: Literal["FLOP", "TURN", "RIVER"]
     actions: List[Action]
 
 class GameState(BaseModel):
@@ -70,6 +70,7 @@ class GameState(BaseModel):
     ]
     roundHistory: List[RoundHistory]
     gameStatus: Literal["IN_PROGRESS", "COMPLETED"]
+    currentRound: Literal["FLOP", "TURN", "RIVER"]
 
 FLOP_NUMBER_OF_CARDS = 3
 TURN_NUMBER_OF_CARDS = 1
@@ -97,12 +98,44 @@ class PokerGameFunctions:
 
         # Remove the cards that were used for the community cards
         game_state.currentFullDeckOfCards = game_state.currentFullDeckOfCards[FLOP_NUMBER_OF_CARDS:]
-
+        
         # Save the game state to a json file
         print('Saving game state to json file')
         PokerGameFunctions.update_game_state(game_state)
         
         return game_state
+
+    @staticmethod
+    def set_turn_round() -> Tuple[List[Card], Literal["TURN"]]:
+        game_state = PokerGameFunctions.get_game_state()
+        return PokerGameFunctions.set_round(game_state, "TURN")
+
+    @staticmethod
+    def set_river_round() -> Tuple[List[Card], Literal["RIVER"]]:
+        game_state = PokerGameFunctions.get_game_state()
+        return PokerGameFunctions.set_round(game_state, "RIVER")
+
+    @staticmethod
+    def set_round(game_state: GameState, round: Literal["FLOP", "TURN", "RIVER"]) -> Tuple[List[Card], Literal["TURN", "RIVER"]]:
+        # Get the number of cards to add based on the round
+        cards_to_add = TURN_NUMBER_OF_CARDS if round == "TURN" else RIVER_NUMBER_OF_CARDS
+        
+        # Add new cards to existing community cards
+        new_cards = game_state.currentFullDeckOfCards[:cards_to_add]
+        game_state.communityCards.extend(new_cards)
+
+        # Remove the cards that were used for the community cards
+        game_state.currentFullDeckOfCards = game_state.currentFullDeckOfCards[cards_to_add:]
+
+        # Set the current round
+        game_state.currentRound = round
+
+        return game_state.communityCards, game_state.currentRound
+
+    @staticmethod
+    def get_current_round() -> Literal["FLOP", "TURN", "RIVER"]:
+        game_state = PokerGameFunctions.get_game_state()
+        return game_state.currentRound
 
     @staticmethod
     def get_game_state() -> GameState:

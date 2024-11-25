@@ -17,7 +17,7 @@ class SetGameTool(BaseTool):
 
     def _run(self) -> str:
         # Implementation goes here
-        game_state = GameState(gameId='123456', timestamp='2024-03-20T15:30:00Z', potAmount=0, communityCards=[], currentBet=0, roundHistory=[], gameStatus='IN_PROGRESS')
+        game_state = GameState(gameId='123456', timestamp='2024-03-20T15:30:00Z', potAmount=0, communityCards=[], currentBet=0, roundHistory=[], gameStatus='IN_PROGRESS', currentRound='FLOP')
         print(game_state.model_dump_json(indent=2))
         PokerGameFunctions.set_game(game_state)
         return "Game state set successfully."
@@ -141,3 +141,45 @@ class GetPlayersAndCommunityCardsTool(BaseTool):
 
     def _run(self) -> str:
         return PokerGameFunctions.get_players_and_community_cards()
+
+class GetCurrentRoundInput(BaseModel):
+    """Input schema for GetCurrentRound."""
+    # player_id: str = Field(..., description="The id of the player.")
+
+class GetCurrentRoundTool(BaseTool):
+    name: str = "getCurrentRound"
+    description: str = (
+        "Get the current round of the game."
+    )
+    args_schema: Type[BaseModel] = GetCurrentRoundInput
+
+    def _run(self) -> str:
+        return PokerGameFunctions.get_current_round()
+
+class SetTurnRoundInput(BaseModel):
+    """Input schema for SetTurnRound."""
+    # player_id: str = Field(..., description="The id of the player.")
+
+class SetTurnRoundTool(BaseTool):
+    name: str = "setTurnRound"
+    description: str = (
+        "Set the turn round of the game."
+    )
+    args_schema: Type[BaseModel] = SetTurnRoundInput
+
+    def _run(self) -> str:
+        return PokerGameFunctions.set_turn_round()
+
+class SetRiverRoundInput(BaseModel):
+    """Input schema for SetRiverRound."""
+    # player_id: str = Field(..., description="The id of the player.")
+
+class SetRiverRoundTool(BaseTool):
+    name: str = "setRiverRound"
+    description: str = (
+        "Set the river round of the game."
+    )
+    args_schema: Type[BaseModel] = SetRiverRoundInput
+
+    def _run(self) -> str:
+        return PokerGameFunctions.set_river_round()

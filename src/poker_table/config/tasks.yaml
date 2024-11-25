@@ -5,7 +5,7 @@ set_game_task:
     will ask the player_1 to bet. The way the state changed is by means of updating
     a json file that contains the state of the game.
   expected_output: >
-    The instruction to the player_1 to bet.
+    The instruction to the player_1 to place the bet.
   agent: game_master
 
 player_1_check_cards_task:
@@ -50,13 +50,32 @@ player_3_bet_task:
     After checking your cards and the community cards, carefully
     think about your bet and make it.
   expected_output: >
-    The bet you made. Ask the game master to decide who won
-    the round.
+    The bet you made. If the current round is the river, ask the
+    game master to decide who the game winner is. Otherwise,
+    instruct the game master to set the next round.
   agent: player_3
 
-decide_round_winner_task:
+set_turn_round_task:
   description: >
-    Based on the players' bets and the community cards, the game master decides who won the round.
+    Set the turn round of the game by setting the community card with the
+    new card.
   expected_output: >
-    The result of the round.
+    The new version of the community cards for the turn round. Instruct
+    the player_1 to bet again for the turn round.
+  agent: game_master
+
+set_river_round_task:
+  description: >
+    Set the river round of the game by setting the community card with the
+    new card.
+  expected_output: >
+    The new version of the community cards for the river round. Instruct
+    the player_1 to bet again for the river round.
+  agent: game_master
+
+decide_game_winner_task:
+  description: >
+    Based on the players' bets and the community cards, the game master decides who won the game.
+  expected_output: >
+    The result of the game.
   agent: game_master
