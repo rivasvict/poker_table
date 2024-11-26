@@ -60,22 +60,24 @@ set_turn_round_task:
     Set the turn round of the game by setting the community card with the
     new card.
   expected_output: >
-    The new version of the community cards for the turn round. Instruct
-    the player_1 to bet again for the turn round.
+    The new version of the community cards for the turn round. Ask the player_1
+    to bet again for the turn round.
   agent: game_master
 
 set_river_round_task:
   description: >
     Set the river round of the game by setting the community card with the
-    new card.
+    new card. You should never start this task until the players have made
+    their bets for the turn round.
   expected_output: >
-    The new version of the community cards for the river round. Instruct
-    the player_1 to bet again for the river round.
+    The new version of the community cards for the river round. Ask the player_1
+    to bet again for the river round.
   agent: game_master
 
 decide_game_winner_task:
   description: >
     Based on the players' bets and the community cards, the game master decides who won the game.
+    You should never start this task until the players have made their bets for the river round.
   expected_output: >
     The result of the game.
   agent: game_master

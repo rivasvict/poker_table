@@ -130,6 +130,10 @@ class PokerGameFunctions:
         # Set the current round
         game_state.currentRound = round
 
+        # Save the game state to a json file
+        print('Saving game state to json file')
+        PokerGameFunctions.update_game_state(game_state)
+
         return game_state.communityCards, game_state.currentRound
 
     @staticmethod
