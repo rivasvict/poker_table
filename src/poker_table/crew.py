@@ -43,6 +43,37 @@ class PokerTable():
 			verbose=True
 		)
 
+	@agent
+	def poker_engine_system_trigger(self) -> Agent:
+		return Agent(
+			config=self.agents_config['poker_engine_system_trigger'],
+			verbose=True
+		)
+
+	# Poker engine
+	@agent
+	def poker_engine_vision_system(self) -> Agent:
+		return Agent(
+			config=self.agents_config['poker_engine_vision_system'],
+			verbose=True
+		)
+
+	@agent
+	def poker_engine_prefrontal_cortex_system(self) -> Agent:
+		return Agent(
+			config=self.agents_config['poker_engine_prefrontal_cortex_system'],
+			verbose=True
+		)
+
+	@agent
+	def poker_engine_limbic_system(self) -> Agent:
+		return Agent(
+			config=self.agents_config['poker_engine_limbic_system'],
+			verbose=True
+		)
+
+	# End of poker engine
+
 	@task
 	def set_game_task(self) -> Task:
 		return Task(
@@ -64,21 +95,53 @@ class PokerTable():
 			# TODO: Add a tool for player to be able to see the players' facial expressions
 			tools=[SetBetForPlayer1Tool()]
 		)
-	
+
+	# Poker engine tasks
 	@task
-	def player_2_check_cards_task(self) -> Task:
+	def poker_engine_system_trigger_bet_task(self) -> Task:
 		return Task(
-			config=self.tasks_config['player_2_check_cards_task'],
+			config=self.tasks_config['poker_engine_system_trigger_bet_task'],
+			tools=[]
+		)
+
+	@task
+	def poker_engine_vision_system_gather_information_task(self) -> Task:
+		return Task(
+			config=self.tasks_config['poker_engine_vision_system_gather_information_task'],
+			# TODO: Add a tool for player to be able to see the players' facial expressions
 			tools=[GetPlayer2CardsTool(), GetCommunityCardsTool()]
 		)
 
 	@task
-	def player_2_bet_task(self) -> Task:
+	def poker_engine_prefrontal_cortex_system_decide_best_objective_bet_task(self) -> Task:
 		return Task(
-			config=self.tasks_config['player_2_bet_task'],
-			# TODO: Add a tool for player to be able to see the players' facial expressions
+			config=self.tasks_config['poker_engine_prefrontal_cortex_system_decide_best_objective_bet_task'],
+			tools=[]
+		)
+
+	@task
+	def poker_engine_limbic_system_bet_task(self) -> Task:
+		return Task(
+			config=self.tasks_config['poker_engine_limbic_system_bet_task'],
 			tools=[SetBetForPlayer2Tool()]
 		)
+
+	# End of poker engine tasks
+
+	# @task
+	# def player_2_check_cards_task(self) -> Task:
+	# 	return Task(
+	# 		config=self.tasks_config['player_2_check_cards_task'],
+	# 		tools=[GetPlayer2CardsTool(), GetCommunityCardsTool()]
+	# 	)
+
+	# @task
+	# def player_2_bet_task(self) -> Task:
+	# 	return Task(
+	# 		config=self.tasks_config['player_2_bet_task'],
+	# 		# TODO: Add a tool for player to be able to see the players' facial expressions
+	# 		tools=[SetBetForPlayer2Tool()]
+	# 	)
 
 	@task
 	def player_3_check_cards_task(self) -> Task:
