@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 
 from .crews.poker_table import PokerTable
-from crewai.flow.flow import start
-from crewai.flow.flow import Flow
+from crewai.flow.flow import start, Flow
 
 class PokerTableFlow(Flow):
   
