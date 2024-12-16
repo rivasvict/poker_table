@@ -5,7 +5,7 @@ set_game_task:
     will ask the player_1 to bet. The way the state changed is by means of updating
     a json file that contains the state of the game.
   expected_output: >
-    The instruction to the player_1 to place the bet.
+    Announce the game has started with enthusiasm.
   agent: game_master
 
 player_1_check_cards_task:
@@ -20,19 +20,10 @@ player_1_bet_task:
     After checking your cards and the community cards, carefully
     think about your bet and make it.
   expected_output: >
-    The bet you made. Then instruct the poker engine system trigger
-    to bet.
+    The bet you made.
   agent: player_1
 
 # Poker engine
-
-poker_engine_system_trigger_bet_task:
-  description: >
-    Tell the vision system to gather information from the poker table
-    and the players.
-  expected_output: >
-    The instruction to the vision system to start gathering information.
-  agent: poker_engine_system_trigger
 
 poker_engine_vision_system_gather_information_task:
   description: >
@@ -63,7 +54,7 @@ poker_engine_limbic_system_bet_task:
     bet along with the game information you received from the prefrontal cortex
     system and makes the best poker bet based on it.
   expected_output: >
-    The bet you decided. Then instruct player_3 to bet.
+    The bet you decided.
   agent: poker_engine_limbic_system
 
 # End of poker engine
@@ -105,8 +96,7 @@ set_turn_round_task:
     Set the turn round of the game by setting the community card with the
     new card.
   expected_output: >
-    The new version of the community cards for the turn round. Ask the player_1
-    to bet again for the turn round.
+    The new version of the community cards for the turn round.
   agent: game_master
 
 set_river_round_task:

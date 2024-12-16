@@ -43,13 +43,6 @@ class PokerTable():
 			verbose=True
 		)
 
-	@agent
-	def poker_engine_system_trigger(self) -> Agent:
-		return Agent(
-			config=self.agents_config['poker_engine_system_trigger'],
-			verbose=True
-		)
-
 	# Poker engine
 	@agent
 	def poker_engine_vision_system(self) -> Agent:
@@ -81,29 +74,41 @@ class PokerTable():
 			tools=[SetGameTool()]
 		)
 
+	def check_cards(self, player_id, task_config_key) -> Task:
+		get_player_card_tools = {
+			"player_1": GetPlayer1CardsTool,
+			"player_2": GetPlayer2CardsTool,
+			"player_3": GetPlayer3CardsTool,
+		}
+
+		GetPlayerCardsTool = get_player_card_tools[player_id]
+		return Task(
+			config=self.tasks_config[task_config_key],
+			tools=[GetPlayerCardsTool(), GetCommunityCardsTool()]
+		)
+
 	@task
 	def player_1_check_cards_task(self) -> Task:
+		return self.check_cards(player_id='player_1', task_config_key='player_1_check_cards_task')
+
+	def bet(self, player_id, task_config_key) -> Task:
+		bet_tools = {
+			'player_1': SetBetForPlayer1Tool,
+			'player_2': SetBetForPlayer2Tool, 
+			'player_3': SetBetForPlayer3Tool
+		}
+		SetBetForPlayerTool = bet_tools[player_id]
 		return Task(
-			config=self.tasks_config['player_1_check_cards_task'],
-			tools=[GetPlayer1CardsTool(), GetCommunityCardsTool()]
+			config=self.tasks_config[task_config_key],
+			# TODO: Add a tool for player to be able to see the players' facial expressions
+			tools=[SetBetForPlayerTool()]
 		)
 
 	@task
 	def player_1_bet_task(self) -> Task:
-		return Task(
-			config=self.tasks_config['player_1_bet_task'],
-			# TODO: Add a tool for player to be able to see the players' facial expressions
-			tools=[SetBetForPlayer1Tool()]
-		)
+		return self.bet(player_id='player_1', task_config_key='player_1_bet_task')
 
 	# Poker engine tasks
-	@task
-	def poker_engine_system_trigger_bet_task(self) -> Task:
-		return Task(
-			config=self.tasks_config['poker_engine_system_trigger_bet_task'],
-			tools=[]
-		)
-
 	@task
 	def poker_engine_vision_system_gather_information_task(self) -> Task:
 		return Task(
@@ -121,10 +126,7 @@ class PokerTable():
 
 	@task
 	def poker_engine_limbic_system_bet_task(self) -> Task:
-		return Task(
-			config=self.tasks_config['poker_engine_limbic_system_bet_task'],
-			tools=[SetBetForPlayer2Tool()]
-		)
+		return self.bet(player_id='player_2', task_config_key='poker_engine_limbic_system_bet_task')
 
 	# End of poker engine tasks
 
@@ -152,11 +154,7 @@ class PokerTable():
 
 	@task
 	def player_3_bet_task(self) -> Task:
-		return Task(
-			config=self.tasks_config['player_3_bet_task'],
-			# TODO: Add a tool for player to be able to see the players' facial expressions
-			tools=[SetBetForPlayer3Tool(), GetCurrentRoundTool()]
-		)
+		return self.bet(player_id='player_3', task_config_key='player_3_bet_task')
 
 	@task
 	def set_turn_round_task(self) -> Task:
@@ -164,6 +162,10 @@ class PokerTable():
 			config=self.tasks_config['set_turn_round_task'],
 			tools=[SetTurnRoundTool()]
 		)
+
+	@task
+	def player_1_bet_task_on_turn_round(self) -> Task:
+		return self.bet(player_id='player_1', task_config_key='player_1_bet_task')
 
 	@task
 	def set_river_round_task(self) -> Task:
