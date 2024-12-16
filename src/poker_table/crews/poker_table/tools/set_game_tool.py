@@ -1,7 +1,7 @@
 from crewai.tools import BaseTool
 from typing import Type
 from pydantic import BaseModel, Field
-from poker_table.tools.poker_game_tools.poker_game_tools import PokerGameFunctions, GameState
+from .poker_game_tools import PokerGameFunctions, GameState
 
 
 class SetGameInput(BaseModel):

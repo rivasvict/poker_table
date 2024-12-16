@@ -2,7 +2,7 @@
 import sys
 import warnings
 
-from poker_table.crew import PokerTable
+from .crew import PokerTable
 
 warnings.filterwarnings("ignore", category=SyntaxWarning, module="pysbd")
 

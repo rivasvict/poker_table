@@ -5,15 +5,12 @@ description = "poker_table using crewAI"
 authors = [{ name = "Your Name", email = "you@example.com" }]
 requires-python = ">=3.10,<=3.13"
 dependencies = [
-    "crewai[tools]>=0.80.0,<1.0.0"
+    "crewai[tools]>=0.80.0,<1.0.0",
 ]
 
 [project.scripts]
-poker_table = "poker_table.main:run"
-run_crew = "poker_table.main:run"
-train = "poker_table.main:train"
-replay = "poker_table.main:replay"
-test = "poker_table.main:test"
+kickoff = "poker_table.main:kickoff"
+plot = "poker_table.main:plot"
 
 [build-system]
 requires = ["hatchling"]
