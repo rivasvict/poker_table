@@ -25,7 +25,7 @@ player_1_bet_task:
 
 # Poker engine
 
-poker_engine_vision_system_gather_information_task:
+gather_visual_information:
   description: >
     As part of a brain system, you, the vision system gather information
     from the poker table and the players.
@@ -35,27 +35,27 @@ poker_engine_vision_system_gather_information_task:
     - The player_2's cards on hand.
     - Other players' facial expression
     Provide this information to the prefrontal cortex system.
-  agent: poker_engine_vision_system
+  agent: brain_vision_system
 
-poker_engine_prefrontal_cortex_system_decide_best_objective_bet_task:
+analyze_best_play:
   description: >
     As part of a brain system, you, the prefrontal cortex system injests
     the information gathered by the vision system, analyses it and based
     on this information, it decides the best objective bet.
   expected_output: >
     The best objective bet as well as all of the information you
-    received from the vision system. Then tell the limbic system
+    received from the vision system. Then tell the lymbic system
     the best objective play in a simple and concise way.
-  agent: poker_engine_prefrontal_cortex_system
+  agent: brain_pref_cortex
 
-poker_engine_limbic_system_bet_task:
+lymbic_system_bet_task:
   description: >
-    As part of a brain system, you, the limbic system injests the best objective
+    As part of a brain system, you, the lymbic system injests the best objective
     bet along with the game information you received from the prefrontal cortex
     system and makes the best poker bet based on it.
   expected_output: >
     The bet you decided.
-  agent: poker_engine_limbic_system
+  agent: lymbic_system
 
 # End of poker engine
 

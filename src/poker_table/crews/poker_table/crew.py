@@ -45,36 +45,29 @@ class PokerTable():
 
 	# Poker engine
 	@agent
-	def poker_engine_vision_system(self) -> Agent:
+	def brain_vision_system(self) -> Agent:
 		return Agent(
-			config=self.agents_config['poker_engine_vision_system'],
+			config=self.agents_config['brain_vision_system'],
 			verbose=True
 		)
 
 	@agent
-	def poker_engine_prefrontal_cortex_system(self) -> Agent:
+	def brain_pref_cortex(self) -> Agent:
 		return Agent(
-			config=self.agents_config['poker_engine_prefrontal_cortex_system'],
+			config=self.agents_config['brain_pref_cortex'],
 			verbose=True
 		)
 
 	@agent
-	def poker_engine_limbic_system(self) -> Agent:
+	def lymbic_system(self) -> Agent:
 		return Agent(
-			config=self.agents_config['poker_engine_limbic_system'],
+			config=self.agents_config['lymbic_system'],
 			verbose=True
 		)
 
 	# End of poker engine
 
-	@task
-	def set_game_task(self) -> Task:
-		return Task(
-			config=self.tasks_config['set_game_task'],
-			tools=[SetGameTool()]
-		)
-
-	def check_cards(self, player_id, task_config_key) -> Task:
+	def check_cards_task(self, player_id, task_config_key) -> Task:
 		get_player_card_tools = {
 			"player_1": GetPlayer1CardsTool,
 			"player_2": GetPlayer2CardsTool,
@@ -87,11 +80,7 @@ class PokerTable():
 			tools=[GetPlayerCardsTool(), GetCommunityCardsTool()]
 		)
 
-	@task
-	def player_1_check_cards_task(self) -> Task:
-		return self.check_cards(player_id='player_1', task_config_key='player_1_check_cards_task')
-
-	def bet(self, player_id, task_config_key) -> Task:
+	def bet_task(self, player_id, task_config_key) -> Task:
 		bet_tools = {
 			'player_1': SetBetForPlayer1Tool,
 			'player_2': SetBetForPlayer2Tool, 
@@ -105,28 +94,40 @@ class PokerTable():
 		)
 
 	@task
-	def player_1_bet_task(self) -> Task:
-		return self.bet(player_id='player_1', task_config_key='player_1_bet_task')
-
-	# Poker engine tasks
-	@task
-	def poker_engine_vision_system_gather_information_task(self) -> Task:
+	def set_game_task(self) -> Task:
 		return Task(
-			config=self.tasks_config['poker_engine_vision_system_gather_information_task'],
-			# TODO: Add a tool for player to be able to see the players' facial expressions
-			tools=[GetPlayer2CardsTool(), GetCommunityCardsTool()]
+			config=self.tasks_config['set_game_task'],
+			tools=[SetGameTool()]
 		)
 
+	# The '0' at the end of 'player_1_check_cards_task_0' means this is the first turn
 	@task
-	def poker_engine_prefrontal_cortex_system_decide_best_objective_bet_task(self) -> Task:
+	def player_1_check_cards_task_0(self) -> Task:
+		return self.check_cards_task(player_id='player_1', task_config_key='player_1_check_cards_task')
+
+	# The '0' at the end of 'player_1_bet_task_0' means this is the first turn
+	@task
+	def player_1_bet_task_0(self) -> Task:
+		return self.bet_task(player_id='player_1', task_config_key='player_1_bet_task')
+
+	# Poker engine tasks
+	# The '0' at the end of 'gather_visual_information_0' means this is the first turn
+	@task
+	def gather_visual_information_0(self) -> Task:
+		return self.check_cards_task(player_id='player_2', task_config_key='gather_visual_information')
+
+	# The '0' at the end of 'analyze_best_play_0' means this is the first turn
+	@task
+	def analyze_best_play_0(self) -> Task:
 		return Task(
-			config=self.tasks_config['poker_engine_prefrontal_cortex_system_decide_best_objective_bet_task'],
+			config=self.tasks_config['analyze_best_play'],
 			tools=[]
 		)
 
+	# The '0' at the end of 'lymbic_system_bet_task_0' means this is the first turn
 	@task
-	def poker_engine_limbic_system_bet_task(self) -> Task:
-		return self.bet(player_id='player_2', task_config_key='poker_engine_limbic_system_bet_task')
+	def lymbic_system_bet_task_0(self) -> Task:
+		return self.bet_task(player_id='player_2', task_config_key='lymbic_system_bet_task')
 
 	# End of poker engine tasks
 
@@ -146,15 +147,15 @@ class PokerTable():
 	# 	)
 
 	@task
-	def player_3_check_cards_task(self) -> Task:
+	def player_3_check_cards_task_0(self) -> Task:
 		return Task(
 			config=self.tasks_config['player_3_check_cards_task'],
 			tools=[GetPlayer3CardsTool(), GetCommunityCardsTool()]
 		)
 
 	@task
-	def player_3_bet_task(self) -> Task:
-		return self.bet(player_id='player_3', task_config_key='player_3_bet_task')
+	def player_3_bet_task_0(self) -> Task:
+		return self.bet_task(player_id='player_3', task_config_key='player_3_bet_task')
 
 	@task
 	def set_turn_round_task(self) -> Task:
@@ -163,9 +164,43 @@ class PokerTable():
 			tools=[SetTurnRoundTool()]
 		)
 
+	# The '1' at the end of 'player_1_check_cards_task_1' means this is the first turn
 	@task
-	def player_1_bet_task_on_turn_round(self) -> Task:
-		return self.bet(player_id='player_1', task_config_key='player_1_bet_task')
+	def player_1_check_cards_task_1(self) -> Task:
+		return self.check_cards_task(player_id='player_1', task_config_key='player_1_check_cards_task')
+
+	# The '1' at the end of 'player_1_bet_task_1' means this is the first turn
+	@task
+	def player_1_bet_task_1(self) -> Task:
+		return self.bet_task(player_id='player_1', task_config_key='player_1_bet_task')
+
+	# The '1' at the end of 'gather_visual_information_1' means this is the first turn
+	@task
+	def gather_visual_information_1(self) -> Task:
+		return self.check_cards_task(player_id='player_2', task_config_key='gather_visual_information')
+
+	# The '1' at the end of 'analyze_best_play_1' means this is the first turn
+	@task
+	def analyze_best_play_1(self) -> Task:
+		return Task(
+			config=self.tasks_config['analyze_best_play'],
+			tools=[]
+		)
+
+	# The '1' at the end of 'lymbic_system_bet_task_1' means this is the first turn
+	@task
+	def lymbic_system_bet_task_1(self) -> Task:
+		return self.bet_task(player_id='player_2', task_config_key='lymbic_system_bet_task')
+
+	# The '1' at the end of 'player_3_check_cards_task_1' means this is the first turn
+	@task
+	def player_3_check_cards_task_1(self) -> Task:
+		return self.check_cards_task(player_id='player_3', task_config_key='player_3_check_cards_task')
+
+	# The '1' at the end of 'player_3_bet_task_1' means this is the first turn
+	@task
+	def player_3_bet_task_1(self) -> Task:
+		return self.bet_task(player_id='player_3', task_config_key='player_3_bet_task')
 
 	@task
 	def set_river_round_task(self) -> Task:
