@@ -26,21 +26,21 @@ class PokerTable():
 	def player_1(self) -> Agent:
 		return Agent(
 			config=self.agents_config['player_1'],
-			verbose=True
+			verbose=False
 		)
 
 	@agent
 	def player_2(self) -> Agent:
 		return Agent(
 			config=self.agents_config['player_2'],
-			verbose=True
+			verbose=False
 		)
 
 	@agent
 	def player_3(self) -> Agent:
 		return Agent(
 			config=self.agents_config['player_3'],
-			verbose=True
+			verbose=False
 		)
 
 	# Poker engine
@@ -209,6 +209,44 @@ class PokerTable():
 			tools=[SetRiverRoundTool()]
 		)
 
+	# The '2' at the end of 'player_1_check_cards_task_2' means this is the first turn
+	@task
+	def player_1_check_cards_task_2(self) -> Task:
+		return self.check_cards_task(player_id='player_1', task_config_key='player_1_check_cards_task')
+
+	# The '2' at the end of 'player_1_bet_task_2' means this is the first turn
+	@task
+	def player_1_bet_task_2(self) -> Task:
+		return self.bet_task(player_id='player_1', task_config_key='player_1_bet_task')
+
+	# The '2' at the end of 'gather_visual_information_1' means this is the first turn
+	@task
+	def gather_visual_information_2(self) -> Task:
+		return self.check_cards_task(player_id='player_2', task_config_key='gather_visual_information')
+
+	# The '2' at the end of 'analyze_best_play_1' means this is the first turn
+	@task
+	def analyze_best_play_2(self) -> Task:
+		return Task(
+			config=self.tasks_config['analyze_best_play'],
+			tools=[]
+		)
+
+	# The '2' at the end of 'lymbic_system_bet_task_1' means this is the first turn
+	@task
+	def lymbic_system_bet_task_2(self) -> Task:
+		return self.bet_task(player_id='player_2', task_config_key='lymbic_system_bet_task')
+
+	# The '2' at the end of 'player_3_check_cards_task_2' means this is the first turn
+	@task
+	def player_3_check_cards_task_2(self) -> Task:
+		return self.check_cards_task(player_id='player_3', task_config_key='player_3_check_cards_task')
+
+	# The '2' at the end of 'player_3_bet_task_2' means this is the first turn
+	@task
+	def player_3_bet_task_2(self) -> Task:
+		return self.bet_task(player_id='player_3', task_config_key='player_3_bet_task')
+
 	@task
 	def decide_game_winner_task(self) -> Task:
 		return Task(
@@ -230,6 +268,6 @@ class PokerTable():
 			agents=self.agents, # Automatically created by the @agent decorator
 			tasks=self.tasks, # Automatically created by the @task decorator
 			process=Process.sequential,
-			verbose=True,
+			verbose=False,
 			# process=Process.hierarchical, # In case you wanna use that instead https://docs.crewai.com/how-to/Hierarchical/
 		)
