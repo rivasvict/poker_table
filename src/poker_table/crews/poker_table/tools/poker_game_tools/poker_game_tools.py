@@ -199,6 +199,17 @@ class PokerGameFunctions:
     def get_players_and_community_cards() -> str:
         game_state = PokerGameFunctions.get_game_state()
         return f"Players: {game_state.players}\nCommunity Cards: {game_state.communityCards}"
+
+    @staticmethod
+    def get_other_players_facial_expressions(player_id: str) -> str:
+        game_state = PokerGameFunctions.get_game_state()
+        other_players_expressions = []
+        
+        for player in game_state.players:
+            if player.playerId != player_id:
+                other_players_expressions.append(f"{player.playerId}: {player.facialExpression}")
+                
+        return ", ".join(other_players_expressions)
 # game_state = GameState(gameId='123456', timestamp='2024-03-20T15:30:00Z', potAmount=1500, communityCards=[], currentBet=200, roundHistory=[], gameStatus='IN_PROGRESS')
 # print(PokerGameFunctions.get_cards_by_player('player_1'))
 # print(game_state.model_dump_json(indent=2))

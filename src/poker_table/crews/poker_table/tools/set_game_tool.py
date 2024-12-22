@@ -1,7 +1,7 @@
 from crewai.tools import BaseTool
 from typing import Type
 from pydantic import BaseModel, Field
-from poker_table.tools.poker_game_tools.poker_game_tools import PokerGameFunctions, GameState
+from .poker_game_tools import PokerGameFunctions, GameState
 
 
 class SetGameInput(BaseModel):
@@ -183,3 +183,42 @@ class SetRiverRoundTool(BaseTool):
 
     def _run(self) -> str:
         return PokerGameFunctions.set_river_round()
+
+class GetOtherPlayersFacialExpressionForPlayer1Input(BaseModel):
+    """Input schema for GetOtherPlayersFacialExpressionForPlayer1"""
+
+class GetOtherPlayersFacialExpressionForPlayer1Tool(BaseTool):
+    name: str = "getOtherPLayersFacialExpressionForPlayer1Tool"
+    description: str = (
+        "Get other players facial expression for player 1"
+    )
+    args_schema: Type[BaseModel] = GetOtherPlayersFacialExpressionForPlayer1Input
+
+    def _run(self) -> str:
+        return PokerGameFunctions.get_other_players_facial_expressions(player_id="player_1")
+
+class GetOtherPlayersFacialExpressionForPlayer2Input(BaseModel):
+    """Input schema for GetOtherPlayersFacialExpressionForPlayer2"""
+
+class GetOtherPlayersFacialExpressionForPlayer2Tool(BaseTool):
+    name: str = "getOtherPLayersFacialExpressionForPlayer2Tool"
+    description: str = (
+        "Get other players facial expression for player 2"
+    )
+    args_schema: Type[BaseModel] = GetOtherPlayersFacialExpressionForPlayer2Input
+
+    def _run(self) -> str:
+        return PokerGameFunctions.get_other_players_facial_expressions(player_id="player_2")
+
+class GetOtherPlayersFacialExpressionForPlayer3Input(BaseModel):
+    """Input schema for GetOtherPlayersFacialExpressionForPlayer3"""
+
+class GetOtherPlayersFacialExpressionForPlayer3Tool(BaseTool):
+    name: str = "getOtherPLayersFacialExpressionForPlayer3Tool"
+    description: str = (
+        "Get other players facial expression for player 3"
+    )
+    args_schema: Type[BaseModel] = GetOtherPlayersFacialExpressionForPlayer3Input
+
+    def _run(self) -> str:
+        return PokerGameFunctions.get_other_players_facial_expressions(player_id="player_3")
