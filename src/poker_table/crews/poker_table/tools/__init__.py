@@ -17,5 +17,8 @@ from .set_game_tool import (
   GetPlayersAndCommunityCardsTool,
   GetCurrentRoundTool,
   SetTurnRoundTool,
-  SetRiverRoundTool
+  SetRiverRoundTool,
+  GetOtherPlayersFacialExpressionForPlayer1Tool,
+  GetOtherPlayersFacialExpressionForPlayer2Tool,
+  GetOtherPlayersFacialExpressionForPlayer3Tool
 )

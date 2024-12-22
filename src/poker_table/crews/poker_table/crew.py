@@ -1,7 +1,7 @@
 from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
 
-from .tools.set_game_tool import GetCurrentRoundTool, SetBetForPlayer1Tool, SetGameTool, GetPlayer1CardsTool, SetBetForPlayer2Tool, GetPlayer2CardsTool, SetBetForPlayer3Tool, GetPlayer3CardsTool, GetCommunityCardsTool, GetPlayersAndCommunityCardsTool, SetRiverRoundTool, SetTurnRoundTool
+from .tools.set_game_tool import GetCurrentRoundTool, GetOtherPlayersFacialExpressionForPlayer1Tool, GetOtherPlayersFacialExpressionForPlayer2Tool, GetOtherPlayersFacialExpressionForPlayer3Tool, SetBetForPlayer1Tool, SetGameTool, GetPlayer1CardsTool, SetBetForPlayer2Tool, GetPlayer2CardsTool, SetBetForPlayer3Tool, GetPlayer3CardsTool, GetCommunityCardsTool, GetPlayersAndCommunityCardsTool, SetRiverRoundTool, SetTurnRoundTool
 # Uncomment the following line to use an example of a custom tool
 # from poker_table.tools.custom_tool import MyCustomTool
 
@@ -93,6 +93,18 @@ class PokerTable():
 			tools=[SetBetForPlayerTool()]
 		)
 
+	def get_other_players_facial_expression(self, player_id, task_config_key) -> Task:
+		get_facial_expression_tools = {
+			'player_1': GetOtherPlayersFacialExpressionForPlayer1Tool,
+			'player_2': GetOtherPlayersFacialExpressionForPlayer2Tool,
+			'player_3': GetOtherPlayersFacialExpressionForPlayer3Tool,
+		}
+		GetOtherPlayersFacialExpressionForPlayerTool = get_facial_expression_tools[player_id]	
+		return Task(
+			config=self.tasks_config[task_config_key],
+			tools=[GetOtherPlayersFacialExpressionForPlayerTool()]
+		)
+
 	@task
 	def set_game_task(self) -> Task:
 		return Task(
@@ -105,6 +117,11 @@ class PokerTable():
 	def player_1_check_cards_task_0(self) -> Task:
 		return self.check_cards_task(player_id='player_1', task_config_key='player_1_check_cards_task')
 
+	# The '0' at the end of 'player_1_get_other_players_facial_expression_task_0' means this is the first turn
+	@task
+	def player_1_get_other_players_facial_expression_task_0(self) -> Task:
+		return self.get_other_players_facial_expression(player_id='player_1', task_config_key='player_1_get_players_scene')
+
 	# The '0' at the end of 'player_1_bet_task_0' means this is the first turn
 	@task
 	def player_1_bet_task_0(self) -> Task:
@@ -115,6 +132,11 @@ class PokerTable():
 	@task
 	def gather_visual_information_0(self) -> Task:
 		return self.check_cards_task(player_id='player_2', task_config_key='gather_visual_information')
+
+	# The '0' at the end of 'get_players_scene_0' means this is the first turn
+	@task
+	def get_players_scene_0(self) -> Task:
+		return self.get_other_players_facial_expression(player_id='player_2', task_config_key='get_players_scene')
 
 	# The '0' at the end of 'analyze_best_play_0' means this is the first turn
 	@task
@@ -148,10 +170,12 @@ class PokerTable():
 
 	@task
 	def player_3_check_cards_task_0(self) -> Task:
-		return Task(
-			config=self.tasks_config['player_3_check_cards_task'],
-			tools=[GetPlayer3CardsTool(), GetCommunityCardsTool()]
-		)
+		return self.check_cards_task(player_id='player_3', task_config_key='player_3_check_cards_task')
+
+	# The '0' at the end of 'player_3_get_other_players_facial_expression_task_0' means this is the first turn
+	@task
+	def player_3_get_other_players_facial_expression_task_0(self) -> Task:
+		return self.get_other_players_facial_expression(player_id='player_3', task_config_key='player_3_get_players_scene')
 
 	@task
 	def player_3_bet_task_0(self) -> Task:
@@ -169,6 +193,11 @@ class PokerTable():
 	def player_1_check_cards_task_1(self) -> Task:
 		return self.check_cards_task(player_id='player_1', task_config_key='player_1_check_cards_task')
 
+	# The '1' at the end of 'player_1_get_other_players_facial_expression_task_1' means this is the first turn
+	@task
+	def player_1_get_other_players_facial_expression_task_1(self) -> Task:
+		return self.get_other_players_facial_expression(player_id='player_1', task_config_key='player_1_get_players_scene')
+
 	# The '1' at the end of 'player_1_bet_task_1' means this is the first turn
 	@task
 	def player_1_bet_task_1(self) -> Task:
@@ -178,6 +207,11 @@ class PokerTable():
 	@task
 	def gather_visual_information_1(self) -> Task:
 		return self.check_cards_task(player_id='player_2', task_config_key='gather_visual_information')
+
+	# The '1' at the end of 'get_players_scene_1' means this is the first turn
+	@task
+	def get_players_scene_1(self) -> Task:
+		return self.get_other_players_facial_expression(player_id='player_2', task_config_key='get_players_scene')
 
 	# The '1' at the end of 'analyze_best_play_1' means this is the first turn
 	@task
@@ -197,6 +231,11 @@ class PokerTable():
 	def player_3_check_cards_task_1(self) -> Task:
 		return self.check_cards_task(player_id='player_3', task_config_key='player_3_check_cards_task')
 
+	# The '1' at the end of 'player_3_get_other_players_facial_expression_task_1' means this is the first turn
+	@task
+	def player_3_get_other_players_facial_expression_task_1(self) -> Task:
+		return self.get_other_players_facial_expression(player_id='player_3', task_config_key='player_3_get_players_scene')
+
 	# The '1' at the end of 'player_3_bet_task_1' means this is the first turn
 	@task
 	def player_3_bet_task_1(self) -> Task:
@@ -214,6 +253,11 @@ class PokerTable():
 	def player_1_check_cards_task_2(self) -> Task:
 		return self.check_cards_task(player_id='player_1', task_config_key='player_1_check_cards_task')
 
+	# The '2' at the end of 'player_1_get_other_players_facial_expression_task_2' means this is the first turn
+	@task
+	def player_1_get_other_players_facial_expression_task_2(self) -> Task:
+		return self.get_other_players_facial_expression(player_id='player_1', task_config_key='player_1_get_players_scene')
+
 	# The '2' at the end of 'player_1_bet_task_2' means this is the first turn
 	@task
 	def player_1_bet_task_2(self) -> Task:
@@ -223,6 +267,11 @@ class PokerTable():
 	@task
 	def gather_visual_information_2(self) -> Task:
 		return self.check_cards_task(player_id='player_2', task_config_key='gather_visual_information')
+
+	# The '2' at the end of 'get_players_scene_2' means this is the first turn
+	@task
+	def get_players_scene_2(self) -> Task:
+		return self.get_other_players_facial_expression(player_id='player_2', task_config_key='get_players_scene')
 
 	# The '2' at the end of 'analyze_best_play_1' means this is the first turn
 	@task

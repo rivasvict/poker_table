@@ -12,36 +12,71 @@ player_1_check_cards_task:
   description: >
     You see your cards on hand and the community cards.
   expected_output: >
-    String that describes your cards and the community cards.
+    String that describes your cards and the community cards
+    in the following format (- [rank] of [suit]) that follows
+    this example:
+    - 6 of Spades
+    - 2 of Clubs 
+    - 6 of Diamonds
   agent: player_1
 
 player_1_bet_task:
   description: >
     After checking your cards and the community cards, carefully
-    think about your bet and make it.
+    think about your bet and make it. If you try to place a bet and the result is
+    a fold, finish your current turn.
   expected_output: >
     The bet you made.
+  agent: player_1
+
+player_1_get_players_scene:
+  description: >
+    You should look at other players' facial expression
+  expected_output: >
+    A comprenhencive description of other players' facial. Do not report
+    your own facial expression.
   agent: player_1
 
 # Poker engine
 
 gather_visual_information:
   description: >
-    As part of a brain system, you, the vision system gather information
-    from the poker table and the players.
+    As part of the brain system of the player_2, you, the vision
+    system gather information from the poker table and the players.
   expected_output: >
     A comprenhensive description of:
     - The community cards on the table.
     - The player_2's cards on hand.
-    - Other players' facial expression
-    Provide this information to the prefrontal cortex system.
+    All cards descriptions should be a string string that describes
+    your cards and the community cards in the following format
+    (- [rank] of [suit]) that follows:
+    this example:
+    - 6 of Spades
+    - 2 of Clubs 
+    - 6 of Diamonds
+  agent: brain_vision_system
+
+get_players_scene:
+  description: >
+    As part of the brain sysyem of the player_2, you, the vision system
+    get information about other players facial expression.
+    You should take the player_2's on-hand cards information and combine it with
+    the facial expressions and provide it to the prefrontal cortex system
+    so this game information becomes useful for the prefrontal to analyze
+    its best play.
+  expected_output: >
+    A comprenhencive description of:
+    - Other players' facial. Do not report your own facial expression.
+    - On-hand's card information for player 2
+    Pass all of this information to the prefrontal cortex system.
   agent: brain_vision_system
 
 analyze_best_play:
   description: >
-    As part of a brain system, you, the prefrontal cortex system injests
-    the information gathered by the vision system, analyses it and based
-    on this information, it decides the best objective bet.
+    As part of the brain system of the player_2, you, the prefrontal
+    cortex system injests the information gathered by the vision system,
+    analyses it and based on this information, it decides the best
+    objective bet.
   expected_output: >
     The best objective bet as well as all of the information you
     received from the vision system. Then tell the lymbic system
@@ -50,11 +85,14 @@ analyze_best_play:
 
 lymbic_system_bet_task:
   description: >
-    As part of a brain system, you, the lymbic system injests the best objective
-    bet along with the game information you received from the prefrontal cortex
-    system and makes the best poker bet based on it.
+    As part of the brain system of the player_2, you, the lymbic
+    system injests the best objective bet along with the game information
+    you received from the prefrontal cortex system and makes the best
+    poker bet based on it. If you try to place a bet and the result is
+    a fold, finish your current turn.
   expected_output: >
-    The bet you decided.
+    Describe in a short concise way the prefrontal cortex system and also
+    Display of the bet you decided.
   agent: lymbic_system
 
 # End of poker engine
@@ -63,13 +101,19 @@ player_2_check_cards_task:
   description: >
     You see your cards on hand and the community cards.
   expected_output: >
-    String that describes your cards and the community cards.
+    String that describes your cards and the community cards
+    in the following format (- [rank] of [suit]) that follows
+    this example:
+    - 6 of Spades
+    - 2 of Clubs 
+    - 6 of Diamonds
   agent: player_2
 
 player_2_bet_task:
   description: >
     After checking your cards and the community cards, carefully
-    think about your bet and make it.
+    think about your bet and make it. If you try to place a bet and the result is
+    a fold, finish your current turn.
   expected_output: >
     The bet you made. Then instruct the player_3 to bet.
   agent: player_2
@@ -78,13 +122,27 @@ player_3_check_cards_task:
   description: >
     You see your cards on hand and the community cards.
   expected_output: >
-    String that describes your cards and the community cards.
+    String that describes your cards and the community cards
+    in the following format (- [rank] of [suit]) that follows
+    this example:
+    - 6 of Spades
+    - 2 of Clubs 
+    - 6 of Diamonds
+  agent: player_3
+
+player_3_get_players_scene:
+  description: >
+    You should look at other players' facial expression
+  expected_output: >
+    A comprenhencive description of other players' facial. Do not report
+    your own facial expression.
   agent: player_3
 
 player_3_bet_task:
   description: >
     After checking your cards and the community cards, carefully
-    think about your bet and make it.
+    think about your bet and make it. If you try to place a bet and the result is
+    a fold, finish your current turn.
   expected_output: >
     The bet you made. If the current round is the river, ask the
     game master to decide who the game winner is. Otherwise,
