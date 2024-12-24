@@ -75,48 +75,57 @@ class GameState(BaseModel):
 FLOP_NUMBER_OF_CARDS = 3
 TURN_NUMBER_OF_CARDS = 1
 RIVER_NUMBER_OF_CARDS = 1
-class PokerGameFunctions:
+class PokerGameFunctions(BaseModel):
+    game_state: GameState = None
 
-    @staticmethod
-    def set_game(game_state: GameState) -> GameState:
+    def __init__(self, **data):
+        super().__init__(**data)
+        """Initialize PokemonGameFunctions with a new GameState"""
+        self.game_state = GameState(
+            gameId='123456',
+            timestamp='2024-03-20T15:30:00Z',
+            potAmount=0,
+            communityCards=[],
+            currentBet=0,
+            roundHistory=[],
+            gameStatus='IN_PROGRESS',
+            currentRound='FLOP'
+        )
+
+    def set_game(self) -> GameState:
         """
         Deals cards to players and sets community cards.
         """
-        # Create a deck
-        deck = game_state.currentFullDeckOfCards
-        
+
         # Deal 2 cards to each active player
         card_index = 0
-        for player in game_state.players:
-            player.cards = [game_state.currentFullDeckOfCards[card_index], game_state.currentFullDeckOfCards[card_index + 1]]
+        for player in self.game_state.players:
+            player.cards = [self.game_state.currentFullDeckOfCards[card_index], self.game_state.currentFullDeckOfCards[card_index + 1]]
             card_index += 2
         # Remove the cards that were dealt to the players
-        game_state.currentFullDeckOfCards = game_state.currentFullDeckOfCards[card_index + 1:]
+        self.game_state.currentFullDeckOfCards = self.game_state.currentFullDeckOfCards[card_index + 1:]
         
         # Set community cards based on current round
-        game_state.communityCards = game_state.currentFullDeckOfCards[:FLOP_NUMBER_OF_CARDS]
+        self.game_state.communityCards = self.game_state.currentFullDeckOfCards[:FLOP_NUMBER_OF_CARDS]
 
         # Remove the cards that were used for the community cards
-        game_state.currentFullDeckOfCards = game_state.currentFullDeckOfCards[FLOP_NUMBER_OF_CARDS:]
+        self.game_state.currentFullDeckOfCards = self.game_state.currentFullDeckOfCards[FLOP_NUMBER_OF_CARDS:]
         
         # Save the game state to a json file
         print('Saving game state to json file')
-        PokerGameFunctions.update_game_state(game_state)
+        self.update_game_state(self.game_state, storage_type='local')
         
-        return game_state
+        return self.game_state
 
-    @staticmethod
-    def set_turn_round() -> Tuple[List[Card], Literal["TURN"]]:
-        game_state = PokerGameFunctions.get_game_state()
-        return PokerGameFunctions.set_round(game_state, "TURN")
+    def set_turn_round(self) -> Tuple[List[Card], Literal["TURN"]]:
+        game_state = self.get_game_state(storage_type='local')
+        return self.set_round(game_state, "TURN")
 
-    @staticmethod
-    def set_river_round() -> Tuple[List[Card], Literal["RIVER"]]:
-        game_state = PokerGameFunctions.get_game_state()
-        return PokerGameFunctions.set_round(game_state, "RIVER")
+    def set_river_round(self) -> Tuple[List[Card], Literal["RIVER"]]:
+        game_state = self.get_game_state()
+        return self.set_round(game_state, "RIVER")
 
-    @staticmethod
-    def set_round(game_state: GameState, round: Literal["FLOP", "TURN", "RIVER"]) -> Tuple[List[Card], Literal["TURN", "RIVER"]]:
+    def set_round(self, game_state: GameState, round: Literal["FLOP", "TURN", "RIVER"]) -> Tuple[List[Card], Literal["TURN", "RIVER"]]:
         # Get the number of cards to add based on the round
         cards_to_add = TURN_NUMBER_OF_CARDS if round == "TURN" else RIVER_NUMBER_OF_CARDS
         
@@ -132,38 +141,36 @@ class PokerGameFunctions:
 
         # Save the game state to a json file
         print('Saving game state to json file')
-        PokerGameFunctions.update_game_state(game_state)
+        self.update_game_state(game_state)
 
         return game_state.communityCards, game_state.currentRound
 
-    @staticmethod
-    def get_current_round() -> Literal["FLOP", "TURN", "RIVER"]:
-        game_state = PokerGameFunctions.get_game_state()
+    def get_current_round(self) -> Literal["FLOP", "TURN", "RIVER"]:
+        game_state = self.get_game_state()
         return game_state.currentRound
 
-    @staticmethod
-    def get_game_state() -> GameState:
-        # Read the game state from the json file
-        with open('game_state.json', 'r') as f:
-            game_state = json.load(f)
-        return GameState(**game_state)
+    def get_game_state(self, storage_type: Literal['file', 'local'] = 'local') -> GameState:
+        if storage_type == 'local':
+            return self.game_state
+        else:
+            # Read the game state from the json file
+            with open('game_state.json', 'r') as f:
+                game_state = json.load(f)
+                return GameState(**game_state)
 
-    @staticmethod
-    def get_cards_by_player(player_id: str) -> str:
-        game_state = PokerGameFunctions.get_game_state()
+    def get_cards_by_player(self, player_id: str) -> str:
+        game_state = self.get_game_state()
         for player in game_state.players:
             if player.playerId == player_id:
                 return str(player.cards)
         return []
 
-    @staticmethod
-    def get_community_cards() -> str:
-        game_state = PokerGameFunctions.get_game_state()
+    def get_community_cards(self) -> str:
+        game_state = self.get_game_state()
         return str(game_state.communityCards)
 
-    @staticmethod
-    def set_bet(player_id: str, amount: int, facial_expression: str) -> str:
-        game_state = PokerGameFunctions.get_game_state()
+    def set_bet(self, player_id: str, amount: int, facial_expression: str) -> str:
+        game_state = self.get_game_state()
         for player in game_state.players:
             if player.playerId == player_id:
                 # Raise case
@@ -186,23 +193,23 @@ class PokerGameFunctions:
                     return f"Bet not set successfully for player {player_id}. folded."
             
         # Update the game state file
-        PokerGameFunctions.update_game_state(game_state)
+        self.update_game_state(game_state)
         return f"Bet set successfully for player {player_id}: '{amount}' chips with facial expression '{facial_expression}'."
 
-    @staticmethod
-    def update_game_state(game_state: GameState) -> GameState:
-        with open('game_state.json', 'w') as f:
-            json.dump(game_state.model_dump(), f)
+    def update_game_state(self, game_state: GameState, storage_type: Literal['local', 'file'] = 'local') -> GameState:
+        if storage_type == 'local':
+            self.game_state = game_state
+        else:
+            with open('game_state.json', 'w') as f:
+                json.dump(game_state.model_dump(), f)
         return game_state
 
-    @staticmethod
-    def get_players_and_community_cards() -> str:
-        game_state = PokerGameFunctions.get_game_state()
+    def get_players_and_community_cards(self) -> str:
+        game_state = self.get_game_state()
         return f"Players: {game_state.players}\nCommunity Cards: {game_state.communityCards}"
 
-    @staticmethod
-    def get_other_players_facial_expressions(player_id: str) -> str:
-        game_state = PokerGameFunctions.get_game_state()
+    def get_other_players_facial_expressions(self, player_id: str) -> str:
+        game_state = self.get_game_state()
         other_players_expressions = []
         
         for player in game_state.players:
@@ -210,6 +217,13 @@ class PokerGameFunctions:
                 other_players_expressions.append(f"{player.playerId}: {player.facialExpression}")
                 
         return ", ".join(other_players_expressions)
+
+# test = PokerGameFunctions()
+# test.set_game()
+# test.set_turn_round()
+# test.set_river_round()
+# print(test.model_dump_json(indent=2))
+
 # game_state = GameState(gameId='123456', timestamp='2024-03-20T15:30:00Z', potAmount=1500, communityCards=[], currentBet=200, roundHistory=[], gameStatus='IN_PROGRESS')
 # print(PokerGameFunctions.get_cards_by_player('player_1'))
 # print(game_state.model_dump_json(indent=2))

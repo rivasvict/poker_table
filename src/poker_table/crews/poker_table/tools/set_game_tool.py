@@ -3,6 +3,7 @@ from typing import Type
 from pydantic import BaseModel, Field
 from .poker_game_tools import PokerGameFunctions, GameState
 
+game = PokerGameFunctions()
 
 class SetGameInput(BaseModel):
     """Input schema for SetGame."""
@@ -16,10 +17,8 @@ class SetGameTool(BaseTool):
     args_schema: Type[BaseModel] = SetGameInput
 
     def _run(self) -> str:
-        # Implementation goes here
-        game_state = GameState(gameId='123456', timestamp='2024-03-20T15:30:00Z', potAmount=0, communityCards=[], currentBet=0, roundHistory=[], gameStatus='IN_PROGRESS', currentRound='FLOP')
+        game_state = game.set_game()
         print(game_state.model_dump_json(indent=2))
-        PokerGameFunctions.set_game(game_state)
         return "Game state set successfully."
 
 # set_game_tool = SetGameTool()
@@ -36,7 +35,7 @@ class GetPlayer1CardsTool(BaseTool):
     args_schema: Type[BaseModel] = GetPlayer1CardsInput
 
     def _run(self) -> str:
-        cards = PokerGameFunctions.get_cards_by_player(player_id='player_1')
+        cards = game.get_cards_by_player(player_id='player_1')
         return cards;
 
 class SetBetForPlayer1Input(BaseModel):
@@ -52,7 +51,7 @@ class SetBetForPlayer1Tool(BaseTool):
     args_schema: Type[BaseModel] = SetBetForPlayer1Input
 
     def _run(self, amount: int, facial_expression: str) -> str:
-        return PokerGameFunctions.set_bet(player_id="player_1", amount=amount, facial_expression=facial_expression)
+        return game.set_bet(player_id="player_1", amount=amount, facial_expression=facial_expression)
 
 class GetPlayer2CardsInput(BaseModel):
     """Input schema for GetPlayerCards."""
@@ -66,7 +65,7 @@ class GetPlayer2CardsTool(BaseTool):
     args_schema: Type[BaseModel] = GetPlayer2CardsInput
 
     def _run(self) -> str:
-        cards = PokerGameFunctions.get_cards_by_player(player_id='player_2')
+        cards = game.get_cards_by_player(player_id='player_2')
         return cards;
 
 class SetBetForPlayer2Input(BaseModel):
@@ -82,7 +81,7 @@ class SetBetForPlayer2Tool(BaseTool):
     args_schema: Type[BaseModel] = SetBetForPlayer2Input
 
     def _run(self, amount: int, facial_expression: str) -> str:
-        return PokerGameFunctions.set_bet(player_id="player_2", amount=amount, facial_expression=facial_expression)
+        return game.set_bet(player_id="player_2", amount=amount, facial_expression=facial_expression)
 
 class GetPlayer3CardsInput(BaseModel):
     """Input schema for GetPlayerCards."""
@@ -96,7 +95,7 @@ class GetPlayer3CardsTool(BaseTool):
     args_schema: Type[BaseModel] = GetPlayer3CardsInput
 
     def _run(self) -> str:
-        cards = PokerGameFunctions.get_cards_by_player(player_id='player_3')
+        cards = game.get_cards_by_player(player_id='player_3')
         return cards;
 
 class SetBetForPlayer3Input(BaseModel):
@@ -112,7 +111,7 @@ class SetBetForPlayer3Tool(BaseTool):
     args_schema: Type[BaseModel] = SetBetForPlayer3Input
 
     def _run(self, amount: int, facial_expression: str) -> str:
-        return PokerGameFunctions.set_bet(player_id="player_3", amount=amount, facial_expression=facial_expression)
+        return game.set_bet(player_id="player_3", amount=amount, facial_expression=facial_expression)
 
 class GetCommunityCardsInput(BaseModel):
     """Input schema for GetCommunityCards."""
@@ -126,7 +125,7 @@ class GetCommunityCardsTool(BaseTool):
     args_schema: Type[BaseModel] = GetCommunityCardsInput
 
     def _run(self) -> str:
-        return PokerGameFunctions.get_community_cards()
+        return game.get_community_cards()
 
 class GetPlayersAndCommunityCardsInput(BaseModel):
     """Input schema for GetPlayersAndCommunityCards."""
@@ -140,7 +139,7 @@ class GetPlayersAndCommunityCardsTool(BaseTool):
     args_schema: Type[BaseModel] = GetPlayersAndCommunityCardsInput
 
     def _run(self) -> str:
-        return PokerGameFunctions.get_players_and_community_cards()
+        return game.get_players_and_community_cards()
 
 class GetCurrentRoundInput(BaseModel):
     """Input schema for GetCurrentRound."""
@@ -154,7 +153,7 @@ class GetCurrentRoundTool(BaseTool):
     args_schema: Type[BaseModel] = GetCurrentRoundInput
 
     def _run(self) -> str:
-        return PokerGameFunctions.get_current_round()
+        return game.get_current_round()
 
 class SetTurnRoundInput(BaseModel):
     """Input schema for SetTurnRound."""
@@ -168,7 +167,7 @@ class SetTurnRoundTool(BaseTool):
     args_schema: Type[BaseModel] = SetTurnRoundInput
 
     def _run(self) -> str:
-        return PokerGameFunctions.set_turn_round()
+        return game.set_turn_round()
 
 class SetRiverRoundInput(BaseModel):
     """Input schema for SetRiverRound."""
@@ -182,7 +181,7 @@ class SetRiverRoundTool(BaseTool):
     args_schema: Type[BaseModel] = SetRiverRoundInput
 
     def _run(self) -> str:
-        return PokerGameFunctions.set_river_round()
+        return game.set_river_round()
 
 class GetOtherPlayersFacialExpressionForPlayer1Input(BaseModel):
     """Input schema for GetOtherPlayersFacialExpressionForPlayer1"""
@@ -195,7 +194,7 @@ class GetOtherPlayersFacialExpressionForPlayer1Tool(BaseTool):
     args_schema: Type[BaseModel] = GetOtherPlayersFacialExpressionForPlayer1Input
 
     def _run(self) -> str:
-        return PokerGameFunctions.get_other_players_facial_expressions(player_id="player_1")
+        return game.get_other_players_facial_expressions(player_id="player_1")
 
 class GetOtherPlayersFacialExpressionForPlayer2Input(BaseModel):
     """Input schema for GetOtherPlayersFacialExpressionForPlayer2"""
@@ -208,7 +207,7 @@ class GetOtherPlayersFacialExpressionForPlayer2Tool(BaseTool):
     args_schema: Type[BaseModel] = GetOtherPlayersFacialExpressionForPlayer2Input
 
     def _run(self) -> str:
-        return PokerGameFunctions.get_other_players_facial_expressions(player_id="player_2")
+        return game.get_other_players_facial_expressions(player_id="player_2")
 
 class GetOtherPlayersFacialExpressionForPlayer3Input(BaseModel):
     """Input schema for GetOtherPlayersFacialExpressionForPlayer3"""
@@ -221,4 +220,4 @@ class GetOtherPlayersFacialExpressionForPlayer3Tool(BaseTool):
     args_schema: Type[BaseModel] = GetOtherPlayersFacialExpressionForPlayer3Input
 
     def _run(self) -> str:
-        return PokerGameFunctions.get_other_players_facial_expressions(player_id="player_3")
+        return game.get_other_players_facial_expressions(player_id="player_3")
