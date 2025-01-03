@@ -1,7 +1,23 @@
 from crewai import Agent, Crew, Process, Task
-from crewai.project import CrewBase, agent, crew, task
+from crewai.project import CrewBase, agent, crew, task, before_kickoff
+from poker_table.crews.poker_table.tools.poker_game_tools.model import GameState
 
-from .tools.set_game_tool import GetCurrentRoundTool, GetOtherPlayersFacialExpressionForPlayer1Tool, GetOtherPlayersFacialExpressionForPlayer2Tool, GetOtherPlayersFacialExpressionForPlayer3Tool, SetBetForPlayer1Tool, SetGameTool, GetPlayer1CardsTool, SetBetForPlayer2Tool, GetPlayer2CardsTool, SetBetForPlayer3Tool, GetPlayer3CardsTool, GetCommunityCardsTool, GetPlayersAndCommunityCardsTool, SetRiverRoundTool, SetTurnRoundTool
+from .tools.set_game_tool import (
+  GetOtherPlayersFacialExpressionForPlayer1Tool,
+	GetOtherPlayersFacialExpressionForPlayer2Tool,
+	GetOtherPlayersFacialExpressionForPlayer3Tool,
+	SetBetForPlayer1Tool,
+	SetGameTool,
+	GetPlayer1CardsTool,
+	SetBetForPlayer2Tool,
+	GetPlayer2CardsTool,
+	SetBetForPlayer3Tool,
+	GetPlayer3CardsTool,
+	GetCommunityCardsTool,
+	GetPlayersAndCommunityCardsTool,
+	SetRiverRoundTool,
+	SetTurnRoundTool
+)
 # Uncomment the following line to use an example of a custom tool
 # from poker_table.tools.custom_tool import MyCustomTool
 
@@ -14,6 +30,12 @@ class PokerTable():
 
 	agents_config = 'config/agents.yaml'
 	tasks_config = 'config/tasks.yaml'
+	game_state: GameState = None;
+
+	def __init__(self, inputs, **data):
+		super(**data)
+		print('game_state set')
+		self.game_state = inputs['game_state']
 
 	@agent
 	def game_master(self) -> Agent:
@@ -109,7 +131,7 @@ class PokerTable():
 	def set_game_task(self) -> Task:
 		return Task(
 			config=self.tasks_config['set_game_task'],
-			tools=[SetGameTool()]
+			tools=[SetGameTool(game_state=self.game_state)]
 		)
 
 	# The '0' at the end of 'player_1_check_cards_task_0' means this is the first turn

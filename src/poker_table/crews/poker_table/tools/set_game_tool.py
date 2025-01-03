@@ -7,6 +7,8 @@ game = PokerGameFunctions()
 
 class SetGameInput(BaseModel):
     """Input schema for SetGame."""
+    game_state: GameState = Field(..., description="The game state to be set.")
+    # game_state: dict = Field(..., description="The game state to set.")
     # game_state: GameState = Field(..., description="The game state to set.")
 
 class SetGameTool(BaseTool):
@@ -16,12 +18,15 @@ class SetGameTool(BaseTool):
     )
     args_schema: Type[BaseModel] = SetGameInput
 
-    def _run(self) -> str:
-        game_state = game.set_game()
+    # def _run(self, game_state: GameState) -> str:
+    def _run(self, game_state=GameState) -> str:
+        print('---------------------------------')
+        print(str(game_state))
+        game_state = game.set_game(game_state=game_state)
         print(game_state.model_dump_json(indent=2))
         return "Game state set successfully."
 
-# set_game_tool = SetGameTool()
+set_game_tool = SetGameTool()
 
 class GetPlayer1CardsInput(BaseModel):
     """Input schema for GetPlayerCards."""

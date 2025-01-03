@@ -11,6 +11,9 @@ warnings.filterwarnings("ignore", category=SyntaxWarning, module="pysbd")
 # Replace with inputs you want to test with, it will automatically
 # interpolate any tasks and agents information
 
+# TODO: Review if this file is needed to be integrated with the flows to work
+# Suggestion: You can use passing `inputs` from the Kickoff method of the Flows
+# class and printing it here without running PokerTable().crew().kickoff(inputs=inputs)
 def run():
     """
     Run the crew.
